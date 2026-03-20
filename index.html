@@ -17,7 +17,44 @@
       --accent: #f5d27a;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: system-ui, sans-serif; }
+    body { margin: 0; font-family: system-ui, sans-serif; background: #1E1610; color: #f5f0eb; }
+    .fallback-shell {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    @media (max-width: 768px) {
+      .fallback-shell { padding: 12px; }
+    }
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: auto;
+      padding: 8px 16px;
+      background: #1E1610;
+      color: #f5d27a;
+      border-radius: 4px;
+      z-index: 1000;
+      text-decoration: none;
+    }
+    .skip-link:focus { left: 10px; top: 10px; }
+    .fallback-header {
+      display: grid;
+      gap: 10px;
+      margin: 3rem 0 1rem;
+    }
+    .fallback-header h1 {
+      font-size: clamp(1.9rem, 4vw, 2.5rem);
+      line-height: 1.05;
+    }
+    .fallback-nav a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .fallback-nav a:hover,
+    .fallback-nav a:focus-visible { text-decoration: underline; }
+    .fallback-copy { color: rgba(245,240,235,0.74); line-height: 1.6; }
     #loading { position: fixed; inset: 0; z-index: 9999; background: var(--bg-dark);
       display: flex; align-items: center; justify-content: center; flex-direction: column;
       transition: opacity 0.4s ease; }
@@ -33,8 +70,18 @@
   </style>
 </head>
 <body>
-  <div id="loading"><div id="loading-spinner"></div><div id="loading-text">Loading...</div></div>
-  <div id="root"></div>
+  <a href="#root" class="skip-link">Skip to content</a>
+  <header class="fallback-shell fallback-header">
+    <h1>Act Two Catering</h1>
+    <nav class="fallback-nav" aria-label="Primary navigation">
+      <a href="https://davehomeassist.github.io/">Back to DaveHomeAssist</a>
+    </nav>
+    <p class="fallback-copy">Premium comfort catering presented through a browser-based ordering and inquiry shell.</p>
+  </header>
+  <main class="fallback-shell">
+    <div id="loading"><div id="loading-spinner"></div><div id="loading-text">Loading...</div></div>
+    <div id="root"></div>
+  </main>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="/app.js"></script>
