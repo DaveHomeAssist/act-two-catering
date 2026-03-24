@@ -26,7 +26,6 @@ exports.handler = async (event) => {
   const NOTION_DB_ID = process.env.NOTION_DB_ID;
 
   if (!NOTION_API_KEY || !NOTION_DB_ID) {
-    console.error("Missing NOTION_API_KEY or NOTION_DB_ID env vars");
     return { statusCode: 500, headers, body: JSON.stringify({ error: "Server configuration error" }) };
   }
 
@@ -85,13 +84,11 @@ exports.handler = async (event) => {
 
     if (!res.ok) {
       const err = await res.text();
-      console.error("Notion API error:", res.status, err);
       return { statusCode: 502, headers, body: JSON.stringify({ error: "Failed to save quote" }) };
     }
 
     return { statusCode: 200, headers, body: JSON.stringify({ ok: true }) };
   } catch (err) {
-    console.error("Notion API request failed:", err);
     return { statusCode: 502, headers, body: JSON.stringify({ error: "Failed to save quote" }) };
   }
 };

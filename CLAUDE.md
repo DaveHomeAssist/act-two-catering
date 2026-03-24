@@ -1,6 +1,4 @@
-> **DEPRECATED** — This file is superseded by `CLAUDE.md`. Issues, session log, and project metadata now live in CLAUDE.md. This file is retained as a historical archive only.
-
-# AGENTS.md
+# CLAUDE.md
 
 Inherits root rules from `/Users/daverobertson/Desktop/Code/AGENTS.md`.
 
@@ -21,6 +19,11 @@ Catering is a premium service site for Act Two Catering. It is a marketing and l
 - Keep the site deployable as a static package
 - Favor trust and conversion clarity over novelty in primary flows
 
+## Documentation Maintenance
+
+- **Issues**: Track in the issue tracker table below
+- **Session log**: Append to `/Users/daverobertson/Desktop/Code/95-docs-personal/today.csv` after each meaningful change
+
 ## Issue Tracker
 
 | ID | Severity | Status | Title | Notes |
@@ -31,4 +34,3 @@ Catering is a premium service site for Act Two Catering. It is a marketing and l
 ## Session Log
 
 [2026-03-18] [Catering] [docs] Add AGENTS baseline
-
