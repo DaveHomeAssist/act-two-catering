@@ -114,7 +114,7 @@
   </main>
   <script defer crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script defer crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="/app.js"></script>
+  <script defer src="app.js"></script>
   <script>
     const el = document.getElementById('loading');
     const check = () => { if (document.getElementById('root').children.length > 0) { el.classList.add('hide'); setTimeout(() => el.remove(), 500); } else { requestAnimationFrame(check); } };
