@@ -172,31 +172,31 @@ const SERVICES = [{
 const IMAGES = {
   // Hero background images (one per page — dark, moody food/event photography works best)
   hero: {
-    home: "/images/hero-home.jpg",
+    home: "images/hero-home.jpg",
     // Signature croquettes plated beautifully
-    menu: "/images/hero-menu.jpg",
+    menu: "images/hero-menu.jpg",
     // Overhead spread of dishes
-    services: "/images/hero-services.jpg",
+    services: "images/hero-services.jpg",
     // Elegant event table setting
-    events: "/images/hero-events.jpg",
+    events: "images/hero-events.jpg",
     // Candid shot from a catered event
-    reviews: "/images/hero-reviews.jpg",
+    reviews: "images/hero-reviews.jpg",
     // Happy guests at a table
-    pricing: "/images/hero-pricing.jpg",
+    pricing: "images/hero-pricing.jpg",
     // Close-up of plated food
-    about: "/images/hero-about.jpg",
+    about: "images/hero-about.jpg",
     // Family/team in kitchen or at event
-    contact: "/images/hero-contact.jpg",
+    contact: "images/hero-contact.jpg",
     // Warm, inviting table setup
-    areas: "/images/hero-areas.jpg" // Philadelphia/SJ skyline or venue exterior
+    areas: "images/hero-areas.jpg" // Philadelphia/SJ skyline or venue exterior
   },
   // About page photos
   about: {
-    family: "/images/about-family.jpg",
+    family: "images/about-family.jpg",
     // Family photo or candid cooking shot
-    kitchen: "/images/about-kitchen.jpg",
+    kitchen: "images/about-kitchen.jpg",
     // Kitchen prep / behind the scenes
-    team: "/images/about-team.jpg" // Team at an event
+    team: "images/about-team.jpg" // Team at an event
   },
   // Placeholder fallback (generated gradient when image fails to load)
   placeholder: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect fill='%23F0EBE1' width='600' height='400'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Georgia' font-size='18' fill='%23B8B4AC'%3EPhoto Coming Soon%3C/text%3E%3C/svg%3E"
@@ -209,7 +209,7 @@ const MENU_ITEMS = [{
   tags: ["Signature", "GF Option"],
   featured: true,
   icon: "🥇",
-  img: "/images/menu-croquettes-classic.jpg"
+  img: "images/menu-croquettes-classic.jpg"
 }, {
   id: "croquettes-herb",
   category: "signature",
@@ -218,7 +218,7 @@ const MENU_ITEMS = [{
   tags: ["Signature", "Seasonal"],
   featured: true,
   icon: "🌿",
-  img: "/images/menu-croquettes-herb.jpg"
+  img: "images/menu-croquettes-herb.jpg"
 }, {
   id: "croquettes-spicy",
   category: "signature",
@@ -227,7 +227,7 @@ const MENU_ITEMS = [{
   tags: ["Signature", "Spicy"],
   featured: true,
   icon: "🌶️",
-  img: "/images/menu-croquettes-spicy.jpg"
+  img: "images/menu-croquettes-spicy.jpg"
 }, {
   id: "croquettes-truffle",
   category: "signature",
@@ -236,7 +236,7 @@ const MENU_ITEMS = [{
   tags: ["Premium", "Signature"],
   featured: true,
   icon: "🖤",
-  img: "/images/menu-croquettes-truffle.jpg"
+  img: "images/menu-croquettes-truffle.jpg"
 }, {
   id: "mac-cheese",
   category: "sides",
@@ -245,7 +245,7 @@ const MENU_ITEMS = [{
   tags: ["Comfort Classic", "Vegetarian"],
   featured: false,
   icon: "🧀",
-  img: "/images/menu-mac-cheese.jpg"
+  img: "images/menu-mac-cheese.jpg"
 }, {
   id: "collard-greens",
   category: "sides",
@@ -254,7 +254,7 @@ const MENU_ITEMS = [{
   tags: ["Southern", "GF"],
   featured: false,
   icon: "🥬",
-  img: "/images/menu-collard-greens.jpg"
+  img: "images/menu-collard-greens.jpg"
 }, {
   id: "sweet-potato",
   category: "sides",
@@ -263,7 +263,7 @@ const MENU_ITEMS = [{
   tags: ["Seasonal", "GF"],
   featured: false,
   icon: "🍠",
-  img: "/images/menu-sweet-potato.jpg"
+  img: "images/menu-sweet-potato.jpg"
 }, {
   id: "cornbread",
   category: "sides",
@@ -272,7 +272,7 @@ const MENU_ITEMS = [{
   tags: ["House Made"],
   featured: false,
   icon: "🌽",
-  img: "/images/menu-cornbread.jpg"
+  img: "images/menu-cornbread.jpg"
 }, {
   id: "slaw",
   category: "sides",
@@ -281,7 +281,7 @@ const MENU_ITEMS = [{
   tags: ["Fresh", "Vegan", "GF"],
   featured: false,
   icon: "🥗",
-  img: "/images/menu-citrus-slaw.jpg"
+  img: "images/menu-citrus-slaw.jpg"
 }, {
   id: "dipping-trio",
   category: "extras",
@@ -290,7 +290,7 @@ const MENU_ITEMS = [{
   tags: ["House Made"],
   featured: false,
   icon: "🫙",
-  img: "/images/menu-dipping-trio.jpg"
+  img: "images/menu-dipping-trio.jpg"
 }, {
   id: "dessert-bites",
   category: "extras",
@@ -299,7 +299,7 @@ const MENU_ITEMS = [{
   tags: ["Dessert", "Seasonal"],
   featured: false,
   icon: "🍫",
-  img: "/images/menu-dessert-bites.jpg"
+  img: "images/menu-dessert-bites.jpg"
 }];
 const EVENTS = [{
   id: 1,
