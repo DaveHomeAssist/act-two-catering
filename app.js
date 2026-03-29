@@ -1422,24 +1422,37 @@ function QuoteForm({
     setFormErrors({});
     setStep(s => s + 1);
   };
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    if (submitting) return;
     const step1 = validateStep(1);
     const step2 = validateStep(2);
     const allErrs = { ...step1, ...step2 };
     if (Object.keys(allErrs).length > 0) { setFormErrors(allErrs); return; }
     setSubmitting(true);
     setSubmitError("");
-    fetch("/.netlify/functions/quote", {
+    try {
+      const body = new URLSearchParams({
+        "form-name": "quote",
+        name: form.name,
+        phone: form.phone,
+        email: form.email,
+        service: form.service,
+        guests: String(form.guests),
+        eventDate: form.eventDate,
+        location: form.location,
+        details: form.details
+      }).toString();
+      const res = await fetch("/", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form)
-    }).then(res => {
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body
+      });
       if (!res.ok) throw new Error("Submission failed");
       setSubmitted(true);
-    }).catch(() => {
+    } catch (_) {
       setSubmitError("Something went wrong. Please call us directly.");
       setSubmitting(false);
-    });
+    }
   };
   if (submitted) return /*#__PURE__*/React.createElement("div", {
     className: "quote-form-container",

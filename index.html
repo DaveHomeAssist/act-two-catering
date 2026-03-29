@@ -112,6 +112,18 @@
       </noscript>
     </div>
   </main>
+  <form name="quote" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden>
+    <input type="hidden" name="form-name" value="quote">
+    <input type="hidden" name="bot-field">
+    <input type="text" name="service">
+    <input type="text" name="guests">
+    <input type="text" name="eventDate">
+    <input type="text" name="location">
+    <input type="text" name="name">
+    <input type="text" name="phone">
+    <input type="email" name="email">
+    <textarea name="details"></textarea>
+  </form>
   <script defer crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script defer crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="/app.js"></script>
