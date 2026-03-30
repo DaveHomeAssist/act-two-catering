@@ -1585,6 +1585,15 @@ function HomePage() {
   const featuredEvents = EVENTS.filter(p => p.featured).slice(0, 4);
   const featuredReviews = REVIEWS.filter(r => r.featured).slice(0, 3);
   const signatureItems = MENU_ITEMS.filter(m => m.category === "signature");
+  const menuById = new Map(MENU_ITEMS.map((item) => [item.id, item]));
+  const homeMenuItems = [
+    "croquettes-classic",
+    "croquettes-truffle",
+    "mac-cheese",
+    "collard-greens",
+    "cornbread",
+    "dessert-bites",
+  ].map((id) => menuById.get(id)).filter(Boolean);
   const heroStats = [
     { value: `${signatureItems.length}`, label: "signature styles" },
     { value: `${SERVICE_AREAS.length}`, label: "service zones" },
@@ -1687,12 +1696,15 @@ function HomePage() {
         </div>
 
         <SectionHeading
-          label="Signature Lineup"
-          title="Four Ways to Fall in Love"
-          subtitle="Every variety starts with the same family recipe. Each one takes it somewhere new."
+          label="From the Menu"
+          title="A Fuller Look at the Table"
+          subtitle="The croquettes may start the conversation, but the sides and sweets are what make the spread feel complete."
         />
         <div className="menu-grid">
-          {signatureItems.map(item => <MenuItemCard key={item.id} item={item} />)}
+          {homeMenuItems.map(item => <MenuItemCard key={item.id} item={item} />)}
+        </div>
+        <div className="text-center mt-32">
+          <button className="link-btn" onClick={() => navigate("/menu")}>See the full menu →</button>
         </div>
       </div>
     </section>

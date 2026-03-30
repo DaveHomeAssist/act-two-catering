@@ -1524,6 +1524,15 @@ textarea:focus-visible {
     const featuredEvents = EVENTS.filter((p) => p.featured).slice(0, 4);
     const featuredReviews = REVIEWS.filter((r) => r.featured).slice(0, 3);
     const signatureItems = MENU_ITEMS.filter((m) => m.category === "signature");
+    const menuById = new Map(MENU_ITEMS.map((item) => [item.id, item]));
+    const homeMenuItems = [
+      "croquettes-classic",
+      "croquettes-truffle",
+      "mac-cheese",
+      "collard-greens",
+      "cornbread",
+      "dessert-bites"
+    ].map((id) => menuById.get(id)).filter(Boolean);
     const heroStats = [
       { value: `${signatureItems.length}`, label: "signature styles" },
       { value: `${SERVICE_AREAS.length}`, label: "service zones" },
@@ -1561,11 +1570,11 @@ textarea:focus-visible {
     )), /* @__PURE__ */ React.createElement("div", { className: "sig-feature-body" }, /* @__PURE__ */ React.createElement("div", { className: "section-label" }, "Our Signature"), /* @__PURE__ */ React.createElement("h2", null, "Premium Turkey ", /* @__PURE__ */ React.createElement("em", null, "Croquettes")), /* @__PURE__ */ React.createElement("p", null, "Crispy golden exterior, creamy seasoned turkey filling \u2014 born from a family recipe and refined for events of every size. The appetizer your guests can't stop talking about."), /* @__PURE__ */ React.createElement("div", { className: "sig-varieties" }, /* @__PURE__ */ React.createElement("span", { className: "sig-variety" }, "Classic"), /* @__PURE__ */ React.createElement("span", { className: "sig-variety" }, "Garden Herb"), /* @__PURE__ */ React.createElement("span", { className: "sig-variety" }, "Smoky Chipotle"), /* @__PURE__ */ React.createElement("span", { className: "sig-variety" }, "Black Truffle")), /* @__PURE__ */ React.createElement("button", { className: "link-btn", onClick: () => navigate("/menu") }, "Explore the full menu \u2192"))), /* @__PURE__ */ React.createElement(
       SectionHeading,
       {
-        label: "Signature Lineup",
-        title: "Four Ways to Fall in Love",
-        subtitle: "Every variety starts with the same family recipe. Each one takes it somewhere new."
+        label: "From the Menu",
+        title: "A Fuller Look at the Table",
+        subtitle: "The croquettes may start the conversation, but the sides and sweets are what make the spread feel complete."
       }
-    ), /* @__PURE__ */ React.createElement("div", { className: "menu-grid" }, signatureItems.map((item) => /* @__PURE__ */ React.createElement(MenuItemCard, { key: item.id, item }))))), /* @__PURE__ */ React.createElement("div", { className: "section-divider" }), /* @__PURE__ */ React.createElement("section", { className: "section section-alt" }, /* @__PURE__ */ React.createElement("div", { className: "section-inner" }, /* @__PURE__ */ React.createElement(
+    ), /* @__PURE__ */ React.createElement("div", { className: "menu-grid" }, homeMenuItems.map((item) => /* @__PURE__ */ React.createElement(MenuItemCard, { key: item.id, item }))), /* @__PURE__ */ React.createElement("div", { className: "text-center mt-32" }, /* @__PURE__ */ React.createElement("button", { className: "link-btn", onClick: () => navigate("/menu") }, "See the full menu \u2192")))), /* @__PURE__ */ React.createElement("div", { className: "section-divider" }), /* @__PURE__ */ React.createElement("section", { className: "section section-alt" }, /* @__PURE__ */ React.createElement("div", { className: "section-inner" }, /* @__PURE__ */ React.createElement(
       SectionHeading,
       {
         label: "What We Do",
