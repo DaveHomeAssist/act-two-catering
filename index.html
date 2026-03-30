@@ -76,6 +76,19 @@
       outline: 2px solid var(--accent);
       outline-offset: 3px;
     }
+    body.app-ready {
+      background: #FEFCF9;
+      color: #2A2A2A;
+    }
+    body.app-ready .fallback-header {
+      display: none;
+    }
+    body.app-ready main.fallback-shell,
+    body.app-ready #root {
+      max-width: none;
+      margin: 0;
+      padding: 0;
+    }
   @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
   </style>
 </head>
@@ -117,9 +130,36 @@
   <script defer src="app.js"></script>
   <script>
     const el = document.getElementById('loading');
-    const check = () => { if (document.getElementById('root').children.length > 0) { el.classList.add('hide'); setTimeout(() => el.remove(), 500); } else { requestAnimationFrame(check); } };
+    const root = document.getElementById('root');
+    const markReady = () => {
+      if (!root.children.length) return false;
+      if (!document.body.classList.contains('app-ready')) {
+        document.body.classList.add('app-ready');
+      }
+      if (el) {
+        el.classList.add('hide');
+        setTimeout(() => el.remove(), 500);
+      }
+      return true;
+    };
+
+    const observer = new MutationObserver(() => {
+      if (markReady()) observer.disconnect();
+    });
+
+    observer.observe(root, { childList: true });
+
+    const check = () => {
+      if (!markReady()) requestAnimationFrame(check);
+    };
+
     requestAnimationFrame(check);
-    setTimeout(() => { el.classList.add('hide'); }, 3000);
+    window.addEventListener('load', markReady, { once: true });
+    setTimeout(() => {
+      if (!document.body.classList.contains('app-ready') && el) {
+        el.classList.add('hide');
+      }
+    }, 3000);
   </script>
 </body>
 </html>
