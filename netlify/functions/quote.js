@@ -7,9 +7,20 @@
 
 const NOTION_VERSION = "2022-06-28";
 
+const ALLOWED_ORIGINS = [
+  "https://acttwocatering.com",
+  "https://www.acttwocatering.com",
+  "https://acttwocatering.netlify.app",
+  "http://localhost:8000",
+  "http://127.0.0.1:8000",
+];
+
 exports.handler = async (event) => {
+  const origin = (event.headers && (event.headers.origin || event.headers.Origin)) || "";
+  const allowOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
   const headers = {
-    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Origin": allowOrigin,
+    "Vary": "Origin",
     "Access-Control-Allow-Headers": "Content-Type",
     "Content-Type": "application/json",
   };
