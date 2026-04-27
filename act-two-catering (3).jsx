@@ -50,6 +50,7 @@ const SAMPLE_MENUS = [
     title: "Elegant Dinner Party",
     subtitle: "A four-course progression for intimate, refined evenings",
     intro: "Designed for dinner parties of 8 to 24 guests in your home or a private venue. We bring everything: ingredients, equipment, and on-site cooking and plating. The menu below is a starting point — every course is tailored to your tastes, dietary needs, and the occasion.",
+    image: "images/hero-pricing.jpg",
     dishCount: 13,
     courses: [
       { course: "Hors d'oeuvres", items: [
@@ -82,6 +83,7 @@ const SAMPLE_MENUS = [
     title: "Mediterranean Grill",
     subtitle: "Bright, herb-driven cooking pulled from across the Mediterranean basin",
     intro: "Best for warm-weather gatherings of 15 to 60 guests. The cooking happens largely on grill and plancha with vibrant fresh sides. Adaptable for outdoor or indoor service.",
+    image: "images/hero-menu.jpg",
     dishCount: 11,
     courses: [
       { course: "To start", items: [
@@ -112,6 +114,7 @@ const SAMPLE_MENUS = [
     title: "Big Game Souper Party",
     subtitle: "Cold-weather comfort for casual, crowd-pleasing gatherings",
     intro: "Built for game-day, milestone birthdays, and any event where the goal is comfort food done right. Serves 20 to 80, mostly buffet-style or self-serve stations. Focus on slow-cooked proteins, hearty sides, and food that holds up over a long event.",
+    image: "images/hero-reviews.jpg",
     dishCount: 15,
     courses: [
       { course: "Soups & starters", items: [
@@ -208,9 +211,14 @@ function HashLink({ to, className, children, onClick, ...props }) {
   return <a href={routeHref(to)} className={className} onClick={handleClick} {...props}>{children}</a>;
 }
 
-function HeroSection({ badge, title, subtitle, primaryCta, primaryRoute = "/contact", secondaryCta }) {
+function HeroSection({ badge, title, subtitle, primaryCta, primaryRoute = "/contact", secondaryCta, bgImage }) {
   return (
-    <section className="hero">
+    <section className={`hero ${bgImage ? "has-bg-image" : ""}`}>
+      {bgImage && (
+        <div className="hero-bg-image">
+          <img src={bgImage} alt="" loading="eager" />
+        </div>
+      )}
       <div className="hero-inner">
         {badge && <div className="hero-badge">{badge}</div>}
         <h1 dangerouslySetInnerHTML={{ __html: title }} />
@@ -397,6 +405,7 @@ function HomePage() {
         subtitle={BIZ.tagline}
         primaryCta="Contact Us"
         secondaryCta={`Call ${BIZ.phone}`}
+        bgImage="images/hero-events.jpg"
       />
 
       <section className="section">
@@ -471,6 +480,11 @@ function HomePage() {
               <HashLink key={m.slug} to={`/sample-menus/${m.slug}`}
                 className="card menu-card-link"
                 aria-label={`View sample menu: ${m.title}`}>
+                {m.image && (
+                  <div className="menu-card-thumb">
+                    <img src={m.image} alt="" loading="lazy" />
+                  </div>
+                )}
                 <div className="menu-card-body">
                   <div className="menu-card-kicker">Sample menu</div>
                   <h3>{m.title}</h3>
@@ -523,6 +537,7 @@ function WhatWeDoPage() {
         subtitle="Three formats by event size and tone. Every menu is custom — the categories below describe how we work, not a fixed package."
         primaryCta="Start a conversation"
         secondaryCta={`Call ${BIZ.phone}`}
+        bgImage="images/hero-about.jpg"
       />
 
       <section className="section">
@@ -588,6 +603,7 @@ function SampleMenusPage() {
         badge="Sample menus"
         title="Three menus, <em>endless variations</em>"
         subtitle="Every event is different. The sample menus below show how we build a course progression — yours will be tuned to your guests, dietary needs, and the occasion."
+        bgImage="images/hero-areas.jpg"
       />
       <section className="section">
         <div className="section-inner">
@@ -596,6 +612,11 @@ function SampleMenusPage() {
               <HashLink key={m.slug} to={`/sample-menus/${m.slug}`}
                 className="card menu-card-link"
                 aria-label={`View sample menu: ${m.title}`}>
+                {m.image && (
+                  <div className="menu-card-thumb">
+                    <img src={m.image} alt="" loading="lazy" />
+                  </div>
+                )}
                 <div className="menu-card-body">
                   <div className="menu-card-kicker">Sample menu</div>
                   <h3>{m.title}</h3>
@@ -630,14 +651,19 @@ function SampleMenuDetailPage({ slug }) {
     );
   }
   return (
+    <>
+      <HeroSection
+        badge="Sample menu"
+        title={menu.title}
+        subtitle={menu.subtitle}
+        bgImage={menu.image}
+      />
     <section className="section">
       <div className="section-inner menu-detail">
         <div className="breadcrumb">
           <HashLink to="/">Home</HashLink> / <HashLink to="/sample-menus">Sample menus</HashLink> / {menu.title}
         </div>
         <div className="menu-detail-header">
-          <h1>{menu.title}</h1>
-          <div className="subtitle">{menu.subtitle}</div>
           <p className="menu-detail-intro">{menu.intro}</p>
         </div>
         <div className="menu-rule" />
@@ -671,6 +697,7 @@ function SampleMenuDetailPage({ slug }) {
         </div>
       </div>
     </section>
+    </>
   );
 }
 
@@ -680,6 +707,7 @@ function TheChefPage() {
       <HeroSection
         badge="My second act"
         title="The chef <em>behind the food</em>"
+        bgImage="images/hero-home.jpg"
       />
       <section className="section">
         <div className="section-inner">
@@ -702,6 +730,7 @@ function ContactPage() {
         badge="Contact"
         title="Let us help you <em>celebrate</em>"
         subtitle="Fill out some info and we’ll be in touch shortly. We can’t wait to hear from you!"
+        bgImage="images/hero-contact.jpg"
       />
       <section className="section">
         <div className="section-inner">

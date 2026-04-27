@@ -59,6 +59,7 @@
       title: "Elegant Dinner Party",
       subtitle: "A four-course progression for intimate, refined evenings",
       intro: "Designed for dinner parties of 8 to 24 guests in your home or a private venue. We bring everything: ingredients, equipment, and on-site cooking and plating. The menu below is a starting point — every course is tailored to your tastes, dietary needs, and the occasion.",
+      image: "images/hero-pricing.jpg",
       dishCount: 13,
       courses: [
         { course: "Hors d'oeuvres", items: [
@@ -91,6 +92,7 @@
       title: "Mediterranean Grill",
       subtitle: "Bright, herb-driven cooking pulled from across the Mediterranean basin",
       intro: "Best for warm-weather gatherings of 15 to 60 guests. The cooking happens largely on grill and plancha with vibrant fresh sides. Adaptable for outdoor or indoor service.",
+      image: "images/hero-menu.jpg",
       dishCount: 11,
       courses: [
         { course: "To start", items: [
@@ -121,6 +123,7 @@
       title: "Big Game Souper Party",
       subtitle: "Cold-weather comfort for casual, crowd-pleasing gatherings",
       intro: "Built for game-day, milestone birthdays, and any event where the goal is comfort food done right. Serves 20 to 80, mostly buffet-style or self-serve stations. Focus on slow-cooked proteins, hearty sides, and food that holds up over a long event.",
+      image: "images/hero-reviews.jpg",
       dishCount: 15,
       courses: [
         { course: "Soups & starters", items: [
@@ -412,6 +415,37 @@ textarea:focus-visible {
   background: radial-gradient(circle at 80% 90%, var(--gold-glow) 0%, transparent 50%);
   pointer-events: none;
 }
+
+/* Hero with background photo */
+.hero.has-bg-image {
+  padding: 120px 24px 100px;
+  background: var(--charcoal);
+}
+.hero.has-bg-image::before, .hero.has-bg-image::after { display: none; }
+.hero-bg-image { position: absolute; inset: 0; z-index: 0; }
+.hero-bg-image img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  opacity: 0.4; transition: opacity 0.6s ease;
+}
+.hero-bg-image::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(30,22,16,0.45) 0%, rgba(30,22,16,0.65) 60%, rgba(30,22,16,0.85) 100%);
+  pointer-events: none;
+}
+.hero.has-bg-image .hero-badge {
+  background: rgba(200,151,62,0.18); color: var(--gold-light);
+  border-color: rgba(200,151,62,0.35);
+}
+.hero.has-bg-image h1 { color: var(--cream); text-shadow: 0 2px 20px rgba(0,0,0,0.4); }
+.hero.has-bg-image h1 em { color: var(--gold-light); }
+.hero.has-bg-image p { color: rgba(251,248,243,0.85); }
+.hero.has-bg-image .btn-secondary {
+  background: rgba(255,255,255,0.12); color: var(--cream);
+  border-color: rgba(255,255,255,0.25);
+}
+.hero.has-bg-image .btn-secondary:hover {
+  background: rgba(255,255,255,0.20); border-color: rgba(255,255,255,0.4);
+}
 .hero-inner { max-width: 820px; margin: 0 auto; position: relative; z-index: 1; }
 .hero-badge {
   display: inline-block; background: var(--wine-pale); color: var(--wine);
@@ -611,7 +645,16 @@ textarea:focus-visible {
 /* ── SAMPLE MENU CARDS (index) ── */
 .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
 .menu-card-link { display: block; cursor: pointer; text-decoration: none; color: inherit; }
-.menu-card-body { padding: 28px; display: flex; flex-direction: column; height: 100%; }
+.menu-card-thumb {
+  width: 100%; height: 200px; overflow: hidden;
+  background: var(--cream-dark);
+}
+.menu-card-thumb img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform 0.5s ease;
+}
+.menu-card-link:hover .menu-card-thumb img { transform: scale(1.04); }
+.menu-card-body { padding: 24px 26px; display: flex; flex-direction: column; flex: 1; }
 .menu-card-kicker {
   font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.14em;
   color: var(--wine); font-weight: 700; margin-bottom: 14px;
@@ -753,8 +796,11 @@ textarea:focus-visible {
     return React.createElement("a", { href: routeHref(to), className, onClick: handleClick, ...props }, children);
   }
 
-  function HeroSection({ badge, title, subtitle, primaryCta, primaryRoute = "/contact", secondaryCta }) {
-    return React.createElement("section", { className: "hero" },
+  function HeroSection({ badge, title, subtitle, primaryCta, primaryRoute = "/contact", secondaryCta, bgImage }) {
+    return React.createElement("section", { className: `hero ${bgImage ? "has-bg-image" : ""}` },
+      bgImage ? React.createElement("div", { className: "hero-bg-image" },
+        React.createElement("img", { src: bgImage, alt: "", loading: "eager" })
+      ) : null,
       React.createElement("div", { className: "hero-inner" },
         badge ? React.createElement("div", { className: "hero-badge" }, badge) : null,
         React.createElement("h1", { dangerouslySetInnerHTML: { __html: title } }),
@@ -943,7 +989,8 @@ textarea:focus-visible {
         title: "Restaurant-quality catering, <em>designed for smaller gatherings</em>",
         subtitle: BIZ.tagline,
         primaryCta: "Contact Us",
-        secondaryCta: `Call ${BIZ.phone}`
+        secondaryCta: `Call ${BIZ.phone}`,
+        bgImage: "images/hero-events.jpg"
       }),
 
       // Intro
@@ -1022,6 +1069,9 @@ textarea:focus-visible {
               className: "card menu-card-link",
               "aria-label": `View sample menu: ${m.title}`
             },
+              m.image ? React.createElement("div", { className: "menu-card-thumb" },
+                React.createElement("img", { src: m.image, alt: "", loading: "lazy" })
+              ) : null,
               React.createElement("div", { className: "menu-card-body" },
                 React.createElement("div", { className: "menu-card-kicker" }, "Sample menu"),
                 React.createElement("h3", null, m.title),
@@ -1070,7 +1120,8 @@ textarea:focus-visible {
         title: "Catering for <em>the room you’re hosting</em>",
         subtitle: "Three formats by event size and tone. Every menu is custom — the categories below describe how we work, not a fixed package.",
         primaryCta: "Start a conversation",
-        secondaryCta: `Call ${BIZ.phone}`
+        secondaryCta: `Call ${BIZ.phone}`,
+        bgImage: "images/hero-about.jpg"
       }),
 
       // Service categories
@@ -1126,7 +1177,8 @@ textarea:focus-visible {
       React.createElement(HeroSection, {
         badge: "Sample menus",
         title: "Three menus, <em>endless variations</em>",
-        subtitle: "Every event is different. The sample menus below show how we build a course progression — yours will be tuned to your guests, dietary needs, and the occasion."
+        subtitle: "Every event is different. The sample menus below show how we build a course progression — yours will be tuned to your guests, dietary needs, and the occasion.",
+        bgImage: "images/hero-areas.jpg"
       }),
       React.createElement("section", { className: "section" },
         React.createElement("div", { className: "section-inner" },
@@ -1136,6 +1188,9 @@ textarea:focus-visible {
               className: "card menu-card-link",
               "aria-label": `View sample menu: ${m.title}`
             },
+              m.image ? React.createElement("div", { className: "menu-card-thumb" },
+                React.createElement("img", { src: m.image, alt: "", loading: "lazy" })
+              ) : null,
               React.createElement("div", { className: "menu-card-body" },
                 React.createElement("div", { className: "menu-card-kicker" }, "Sample menu"),
                 React.createElement("h3", null, m.title),
@@ -1168,6 +1223,12 @@ textarea:focus-visible {
       );
     }
     return React.createElement(React.Fragment, null,
+      React.createElement(HeroSection, {
+        badge: "Sample menu",
+        title: menu.title,
+        subtitle: menu.subtitle,
+        bgImage: menu.image
+      }),
       React.createElement("section", { className: "section" },
         React.createElement("div", { className: "section-inner menu-detail" },
           React.createElement("div", { className: "breadcrumb" },
@@ -1175,8 +1236,6 @@ textarea:focus-visible {
             React.createElement(HashLink, { to: "/sample-menus" }, "Sample menus"), " / ", menu.title
           ),
           React.createElement("div", { className: "menu-detail-header" },
-            React.createElement("h1", null, menu.title),
-            React.createElement("div", { className: "subtitle" }, menu.subtitle),
             React.createElement("p", { className: "menu-detail-intro" }, menu.intro)
           ),
           React.createElement("div", { className: "menu-rule" }),
@@ -1211,7 +1270,8 @@ textarea:focus-visible {
     return React.createElement(React.Fragment, null,
       React.createElement(HeroSection, {
         badge: "My second act",
-        title: "The chef <em>behind the food</em>"
+        title: "The chef <em>behind the food</em>",
+        bgImage: "images/hero-home.jpg"
       }),
       React.createElement("section", { className: "section" },
         React.createElement("div", { className: "section-inner" },
@@ -1231,7 +1291,8 @@ textarea:focus-visible {
       React.createElement(HeroSection, {
         badge: "Contact",
         title: "Let us help you <em>celebrate</em>",
-        subtitle: "Fill out some info and we’ll be in touch shortly. We can’t wait to hear from you!"
+        subtitle: "Fill out some info and we’ll be in touch shortly. We can’t wait to hear from you!",
+        bgImage: "images/hero-contact.jpg"
       }),
       React.createElement("section", { className: "section" },
         React.createElement("div", { className: "section-inner" },
