@@ -1,0 +1,171 @@
+{
+  "_meta": {
+    "source": "Notion DB | Recipes (collection://e7d1db52-9389-45d3-8fbe-9a04b0e432d5)",
+    "curated_at": "2026-04-27",
+    "curated_from_sample_size": 60,
+    "notes": "Hand-curated from Tom's working recipe DB. Each menu picks 4-5 dishes that hang together as a course progression. Items not in the DB are not used. When the DB grows, re-curate.",
+    "policy": "Sample menus are starting points. Every event gets a custom menu built around the host's tastes, dietary needs, and budget."
+  },
+
+  "cuisinesWeProduce": [
+    "American comfort",
+    "Spanish",
+    "Italian",
+    "French",
+    "Middle Eastern",
+    "Mediterranean"
+  ],
+
+  "sampleMenus": [
+    {
+      "slug": "elegant-dinner-party",
+      "title": "Elegant Dinner Party",
+      "subtitle": "A four-course progression for intimate, refined evenings",
+      "intro": "Designed for dinner parties of 8 to 24 guests in your home or a private venue. We bring everything: ingredients, equipment, and on-site cooking and plating. The menu below is a starting point. We tailor every course around your tastes, dietary needs, and the occasion.",
+      "courses": [
+        {
+          "course": "Hors d'oeuvres",
+          "items": [
+            "Spanish-style beef tapas kebabs with smoked paprika",
+            "Lebanese stuffed grape leaves with herbs and olive oil",
+            "Salmorejo: chilled Andalusian tomato soup, served in tasting glasses"
+          ]
+        },
+        {
+          "course": "First course",
+          "items": [
+            "Risotto alla Milanese with saffron and aged Parmigiano",
+            "or Lemon and chive risotto for a brighter, springtime variation"
+          ]
+        },
+        {
+          "course": "Main",
+          "items": [
+            "Chef John's quick cassoulet: French white beans, sausage, and confit",
+            "or The Zahav lamb shoulder for a slow-roasted Middle Eastern centerpiece",
+            "or Tarragon chicken cutlets for a lighter French-style entrée"
+          ],
+          "sides": [
+            "Roasted Brussels sprouts with butternut squash, maple, and walnuts",
+            "Potatoes au gratin"
+          ]
+        },
+        {
+          "course": "Dessert",
+          "items": [
+            "Cherry almond linzer cookies",
+            "Classic lemon meringue pie",
+            "or Moroccan lemon cake for a Mediterranean finish"
+          ]
+        }
+      ],
+      "notes": "Wine pairing notes available on request. Service style: plated multi-course, family-style, or buffet — your call."
+    },
+
+    {
+      "slug": "mediterranean-grill",
+      "title": "Mediterranean Grill",
+      "subtitle": "Bright, herb-driven cooking pulled from across the Mediterranean basin",
+      "intro": "Best for warm-weather gatherings of 15 to 60 guests. The cooking happens largely on grill and plancha with vibrant fresh sides. Adaptable for outdoor or indoor service.",
+      "courses": [
+        {
+          "course": "To start",
+          "items": [
+            "Salmorejo: chilled tomato soup with sherry vinegar and good olive oil",
+            "Taktouka: Moroccan roasted pepper and tomato salad",
+            "Lebanese stuffed grape leaves"
+          ]
+        },
+        {
+          "course": "From the grill",
+          "items": [
+            "Joojeh kabob: Persian saffron-yogurt chicken on skewers",
+            "Spanish tapas-style beef kebabs",
+            "Balsamic-glazed salmon",
+            "or Pastilla: Moroccan skillet chicken pie for a richer option"
+          ]
+        },
+        {
+          "course": "Sides",
+          "items": [
+            "Lemon-Caper sole as a lighter fish course",
+            "Rustic Italian crusty bread, warm",
+            "Honey-lime vinaigrette over a simple market green"
+          ]
+        },
+        {
+          "course": "Dessert",
+          "items": [
+            "Moroccan lemon cake",
+            "Turkish coffee brownies"
+          ]
+        }
+      ],
+      "notes": "Strong vegetarian capacity: most apps and sides scale up easily without protein. Vegan adaptations available."
+    },
+
+    {
+      "slug": "big-game",
+      "title": "Big Game Souper Party",
+      "subtitle": "Cold-weather comfort for casual, crowd-pleasing gatherings",
+      "intro": "Built for game-day, milestone birthdays, and any event where the goal is comfort food done right. Serves 20 to 80, mostly buffet-style or self-serve stations. Focus on slow-cooked proteins, hearty sides, and food that holds up over a long event.",
+      "courses": [
+        {
+          "course": "Soups & starters",
+          "items": [
+            "Creamy chicken noodle soup, served in mugs",
+            "Asturian fabada: Spanish white-bean and sausage stew",
+            "Stifado: long-braised Greek beef stew with cinnamon and red wine"
+          ]
+        },
+        {
+          "course": "Mains",
+          "items": [
+            "Emeril's Texas-style smoked brisket, sliced to order",
+            "Slow-cooker Texas pulled pork on potato rolls",
+            "Tuscan-style spareribs with balsamic glaze",
+            "Swedish meatballs with cream sauce"
+          ]
+        },
+        {
+          "course": "On the side",
+          "items": [
+            "Soft dinner rolls and Rustic Italian crusty bread",
+            "Roasted Brussels sprouts with butternut squash",
+            "Potatoes au gratin",
+            "Biscuit vegetable pot pie casserole"
+          ]
+        },
+        {
+          "course": "Sweet finish",
+          "items": [
+            "Sweet potato cheesecake",
+            "Strawberry shortcake cake",
+            "Chocolate raspberry cake"
+          ]
+        }
+      ],
+      "notes": "Designed to hold heat well across a 3-4 hour event. Chafing-dish service available. Perfect for game days, casual milestone birthdays, and corporate watch parties."
+    }
+  ],
+
+  "_unusedRealItems": {
+    "appetizers": [
+      "Béarnaise sauce (sauce-only)",
+      "Remoulade sauce à la New Orleans",
+      "Asian ginger dressing"
+    ],
+    "drinks": [
+      "Sparkling white wine winter sangria",
+      "Traditional sangria",
+      "Strawberry gin smash"
+    ],
+    "breakfast": [
+      "My best blueberry muffins",
+      "Banana bread (4 versions in DB — possible signature item)",
+      "Strawberry muffins",
+      "Apple cider muffins"
+    ],
+    "_note": "Items in the DB but not curated into the three sample menus. Available for custom menus or future menu expansion."
+  }
+}

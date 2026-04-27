@@ -1,7 +1,7 @@
 {
   "name": "Act Two Catering",
   "short_name": "Act Two",
-  "description": "Premium comfort catering anchored by signature turkey croquettes. Serving South Jersey & Philadelphia.",
+  "description": "A premium catering experience tailored for smaller gatherings — restaurant-quality cuisine and exceptional service throughout South Jersey and the greater Philadelphia area.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#1E1610",
@@ -23,14 +23,14 @@
   "screenshots": [],
   "shortcuts": [
     {
-      "name": "View Menu",
-      "short_name": "Menu",
-      "url": "/#/menu",
+      "name": "Sample Menus",
+      "short_name": "Menus",
+      "url": "/#/sample-menus",
       "icons": [{ "src": "/assets/icons/favicon/icon-96x96.png", "sizes": "96x96" }]
     },
     {
-      "name": "Book a Tasting",
-      "short_name": "Book",
+      "name": "Contact Us",
+      "short_name": "Contact",
       "url": "/#/contact",
       "icons": [{ "src": "/assets/icons/favicon/icon-96x96.png", "sizes": "96x96" }]
     }
