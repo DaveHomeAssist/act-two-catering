@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Act Two Catering — Logo Build Demo</title>
+<style>
+  :root {
+    --tan: #f3e0bc;
+    --green: #04580b;
+    --dark: #1f1c1d;
+  }
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: var(--tan);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    color: var(--dark);
+  }
+  body {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    min-height: 100vh;
+  }
+  header {
+    padding: 24px 32px;
+    border-bottom: 1px solid rgba(31, 28, 29, 0.1);
+  }
+  header h1 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  header p {
+    margin: 4px 0 0;
+    font-size: 13px;
+    opacity: 0.7;
+  }
+  main {
+    display: grid;
+    place-items: center;
+    padding: 24px;
+  }
+  .stage {
+    width: min(420px, 70vmin);
+    aspect-ratio: 1 / 1;
+    display: grid;
+    place-items: center;
+  }
+  .stage object {
+    width: 100%;
+    height: 100%;
+  }
+  footer {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 20px 32px;
+    border-top: 1px solid rgba(31, 28, 29, 0.1);
+    font-size: 13px;
+  }
+  button {
+    appearance: none;
+    border: 1px solid var(--dark);
+    background: transparent;
+    color: var(--dark);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font: inherit;
+    cursor: pointer;
+    transition: transform 180ms cubic-bezier(0.4, 0, 0.2, 1),
+                background 180ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  button:hover { background: rgba(31, 28, 29, 0.05); transform: translateY(-1px); }
+  button:active { transform: scale(0.98); }
+  button[aria-pressed="true"] {
+    background: var(--dark);
+    color: var(--tan);
+  }
+  .meta {
+    margin-left: auto;
+    opacity: 0.6;
+    font-variant-numeric: tabular-nums;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Act Two Catering — logo build animation</h1>
+  <p>Reference implementation of the motion choreography plan. ~1.4 s sequence at 1× speed.</p>
+</header>
+
+<main>
+  <div class="stage">
+    <object id="logo" type="image/svg+xml" data="A2C_icon_animated.svg" aria-label="Act Two Catering logo"></object>
+  </div>
+</main>
+
+<footer>
+  <button id="replay" aria-label="Replay animation">Replay</button>
+  <button id="speed-half" aria-pressed="false" aria-label="Half speed">0.5× speed</button>
+  <button id="speed-normal" aria-pressed="true" aria-label="Normal speed">1× speed</button>
+  <span class="meta">Honors prefers-reduced-motion</span>
+</footer>
+
+<script>
+  // The animated SVG declares animation-duration and animation-delay on each
+  // of seven layered parts. To slow the animation, we read each part's
+  // computed values from the loaded SVG document and inject scaled values.
+  // The previous version relied on a CSS variable that was never defined,
+  // which made every speed button render the animation in ~1ms.
+  const obj = document.getElementById("logo");
+  const halfBtn = document.getElementById("speed-half");
+  const normalBtn = document.getElementById("speed-normal");
+  const ANIMATED_IDS = [
+    "left_leaf", "right_leaf", "plate_arc",
+    "spoon", "knife", "fork", "chef_hat",
+  ];
+  let currentSpeed = 1;
+
+  function reload(speedMultiplier) {
+    currentSpeed = speedMultiplier;
+    halfBtn.setAttribute("aria-pressed", speedMultiplier === 0.5 ? "true" : "false");
+    normalBtn.setAttribute("aria-pressed", speedMultiplier === 1 ? "true" : "false");
+    // Cache-bust to force the SVG to restart its animations.
+    obj.data = "A2C_icon_animated.svg?t=" + Date.now();
+  }
+
+  obj.addEventListener("load", () => {
+    const doc = obj.contentDocument;
+    if (!doc) return;
+    if (currentSpeed === 1) return; // animations already at authored speed
+    const factor = 1 / currentSpeed;
+    const rules = ANIMATED_IDS.map((id) => {
+      const el = doc.getElementById(id);
+      if (!el) return "";
+      const style = doc.defaultView.getComputedStyle(el);
+      const dur = parseFloat(style.animationDuration) || 0;     // seconds
+      const delay = parseFloat(style.animationDelay) || 0;
+      const dms = (dur * 1000) * factor;
+      const lms = (delay * 1000) * factor;
+      return `#${id} { animation-duration: ${dms}ms !important; animation-delay: ${lms}ms !important; }`;
+    }).filter(Boolean).join("\n");
+    if (!rules) return;
+    const style = doc.createElement("style");
+    style.textContent = rules;
+    doc.documentElement.appendChild(style);
+  });
+
+  document.getElementById("replay").addEventListener("click", () => reload(currentSpeed));
+  halfBtn.addEventListener("click", () => reload(0.5));
+  normalBtn.addEventListener("click", () => reload(1));
+</script>
+</body>
+</html>
