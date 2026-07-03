@@ -568,6 +568,9 @@ textarea:focus-visible {
   color: white; transition: var(--transition); margin-left: auto;
 }
 .form-btn-next:hover { background: var(--wine-light); }
+.form-btn-back:disabled, .form-btn-next:disabled { opacity: 0.65; cursor: not-allowed; }
+.form-error { color: #9f2f2f; font-size: 12px; margin-top: 6px; line-height: 1.45; }
+.form-error-summary { margin: 12px 0 0; text-align: center; }
 .form-success { text-align: center; padding: 48px 32px; }
 .form-success h3 { font-family: var(--font-display); font-size: 28px; color: var(--charcoal); margin: 16px 0 12px; }
 .form-success p { color: var(--slate); font-size: 14px; }
@@ -841,43 +844,69 @@ textarea:focus-visible {
   }
 
   // ───────────────────────────────────────────────
-  // QUOTE FORM — multi-step, mailto fallback (Phase 2 will wire backend)
+  // QUOTE FORM — multi-step Notion-backed lead capture via Netlify Function
   // ───────────────────────────────────────────────
   function QuoteForm() {
     const [step, setStep] = useState(1);
     const [submitted, setSubmitted] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
+    const [submitError, setSubmitError] = useState("");
+    const [formErrors, setFormErrors] = useState({});
     const [form, setForm] = useState({
       eventType: "", guests: "", eventDate: "", location: "",
-      name: "", phone: "", email: "", details: ""
+      name: "", phone: "", email: "", details: "", website: ""
     });
     const totalSteps = 3;
     const set = (k, v) => setForm((prev) => ({ ...prev, [k]: v }));
 
-    const handleSubmit = () => {
-      const lines = [
-        `Event type: ${form.eventType || "—"}`,
-        `Guests: ${form.guests || "—"}`,
-        `Date: ${form.eventDate || "—"}`,
-        `Location: ${form.location || "—"}`,
-        `Name: ${form.name || "—"}`,
-        `Phone: ${form.phone || "—"}`,
-        `Email: ${form.email || "—"}`,
-        ``,
-        `Details:`,
-        form.details || "(none)"
-      ].join("\n");
-      const subject = encodeURIComponent("Catering inquiry from acttwocatering.com");
-      const body = encodeURIComponent(lines);
-      window.location.href = `mailto:${BIZ.email}?subject=${subject}&body=${body}`;
-      setSubmitted(true);
+    const validateForm = () => {
+      const errors = {};
+      if (form.name.trim().length < 2) errors.name = "Name is required.";
+      if (!form.email.trim() && !form.phone.trim()) errors.email_or_phone = "Add an email or phone number so we can reply.";
+      if (form.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) errors.email = "Use a valid email address.";
+      if (form.guests.trim()) {
+        const count = Number.parseInt(form.guests, 10);
+        if (!Number.isFinite(count) || count < 1 || count > 10000) errors.guests = "Guest count must be between 1 and 10000.";
+      }
+      return errors;
+    };
+
+    const handleSubmit = async () => {
+      if (submitting) return;
+      const errors = validateForm();
+      if (Object.keys(errors).length) {
+        setFormErrors(errors);
+        setSubmitError("Please fix the highlighted fields before sending.");
+        if (errors.name || errors.email_or_phone || errors.email) setStep(2);
+        else setStep(1);
+        return;
+      }
+
+      setFormErrors({});
+      setSubmitError("");
+      setSubmitting(true);
+
+      try {
+        const response = await fetch("/.netlify/functions/quote", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(form)
+        });
+        if (!response.ok) throw new Error("Submission failed");
+        setSubmitted(true);
+      } catch (_) {
+        setSubmitError("Something went wrong. Please call or email us directly.");
+      } finally {
+        setSubmitting(false);
+      }
     };
 
     if (submitted) {
       return React.createElement("div", { className: "quote-form-container" },
         React.createElement("div", { className: "form-success" },
-          React.createElement("div", { style: { fontSize: 48 } }, "✉️"),
-          React.createElement("h3", null, "Inquiry sent"),
-          React.createElement("p", null, "Your email client should be opening now. If it didn't, call or email us directly."),
+          React.createElement("div", { style: { fontSize: 48 } }, "✓"),
+          React.createElement("h3", null, "Inquiry received"),
+          React.createElement("p", null, "Thanks — we'll be in touch within one business day."),
           React.createElement("p", { style: { marginTop: 12 } },
             React.createElement("a", { href: BIZ.phoneTel, style: { color: "var(--wine)", fontWeight: 600 } }, BIZ.phone)
           )
@@ -896,6 +925,11 @@ textarea:focus-visible {
         )
       ),
       React.createElement("div", { className: "form-body" },
+        React.createElement("input", {
+          type: "text", name: "website", tabIndex: -1, autoComplete: "off",
+          value: form.website, onChange: (e) => set("website", e.target.value),
+          "aria-hidden": true, style: { position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }
+        }),
         step === 1 && React.createElement(React.Fragment, null,
           React.createElement("div", { className: "form-field" },
             React.createElement("label", { className: "form-label", htmlFor: "qf-type" }, "Event type"),
@@ -913,8 +947,10 @@ textarea:focus-visible {
               React.createElement("label", { className: "form-label", htmlFor: "qf-guests" }, "Estimated guest count"),
               React.createElement("input", {
                 id: "qf-guests", className: "form-input", type: "number", inputMode: "numeric",
-                placeholder: "e.g. 24", value: form.guests, onChange: (e) => set("guests", e.target.value)
-              })
+                placeholder: "e.g. 24", value: form.guests, onChange: (e) => set("guests", e.target.value),
+                "aria-invalid": Boolean(formErrors.guests)
+              }),
+              formErrors.guests && React.createElement("p", { className: "form-error" }, formErrors.guests)
             ),
             React.createElement("div", { className: "form-field" },
               React.createElement("label", { className: "form-label", htmlFor: "qf-date" }, "Event date"),
@@ -938,25 +974,31 @@ textarea:focus-visible {
             React.createElement("label", { className: "form-label", htmlFor: "qf-name" }, "Full name *"),
             React.createElement("input", {
               id: "qf-name", className: "form-input",
-              value: form.name, onChange: (e) => set("name", e.target.value), required: true
-            })
+              value: form.name, onChange: (e) => set("name", e.target.value), required: true,
+              "aria-invalid": Boolean(formErrors.name)
+            }),
+            formErrors.name && React.createElement("p", { className: "form-error" }, formErrors.name)
           ),
           React.createElement("div", { className: "form-row" },
             React.createElement("div", { className: "form-field" },
-              React.createElement("label", { className: "form-label", htmlFor: "qf-phone" }, "Phone *"),
+              React.createElement("label", { className: "form-label", htmlFor: "qf-phone" }, "Phone"),
               React.createElement("input", {
                 id: "qf-phone", className: "form-input", type: "tel", inputMode: "tel",
-                value: form.phone, onChange: (e) => set("phone", e.target.value), required: true
+                value: form.phone, onChange: (e) => set("phone", e.target.value),
+                "aria-invalid": Boolean(formErrors.email_or_phone)
               })
             ),
             React.createElement("div", { className: "form-field" },
-              React.createElement("label", { className: "form-label", htmlFor: "qf-email" }, "Email *"),
+              React.createElement("label", { className: "form-label", htmlFor: "qf-email" }, "Email"),
               React.createElement("input", {
                 id: "qf-email", className: "form-input", type: "email", inputMode: "email",
-                value: form.email, onChange: (e) => set("email", e.target.value), required: true
+                value: form.email, onChange: (e) => set("email", e.target.value),
+                "aria-invalid": Boolean(formErrors.email || formErrors.email_or_phone)
               })
             )
-          )
+          ),
+          formErrors.email_or_phone && React.createElement("p", { className: "form-error" }, formErrors.email_or_phone),
+          formErrors.email && React.createElement("p", { className: "form-error" }, formErrors.email)
         ),
         step === 3 && React.createElement(React.Fragment, null,
           React.createElement("div", { className: "form-field" },
@@ -969,11 +1011,12 @@ textarea:focus-visible {
           )
         ),
         React.createElement("div", { className: "form-actions" },
-          step > 1 ? React.createElement("button", { className: "form-btn-back", onClick: () => setStep((s) => s - 1) }, "← Back") : null,
+          step > 1 ? React.createElement("button", { className: "form-btn-back", onClick: () => setStep((s) => s - 1), disabled: submitting }, "← Back") : null,
           step < totalSteps
-            ? React.createElement("button", { className: "form-btn-next", onClick: () => setStep((s) => s + 1) }, "Continue →")
-            : React.createElement("button", { className: "form-btn-next", onClick: handleSubmit }, "Send inquiry")
-        )
+            ? React.createElement("button", { className: "form-btn-next", onClick: () => setStep((s) => s + 1), disabled: submitting }, "Continue →")
+            : React.createElement("button", { className: "form-btn-next", onClick: handleSubmit, disabled: submitting }, submitting ? "Sending…" : "Send inquiry")
+        ),
+        submitError && React.createElement("p", { className: "form-error form-error-summary", role: "alert" }, submitError)
       )
     );
   }

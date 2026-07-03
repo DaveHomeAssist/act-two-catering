@@ -1,11 +1,12 @@
 // Netlify Function: POST /.netlify/functions/quote
-// Writes quote form submissions to the Notion "Quote Leads" database.
+// Writes quote form submissions to the canonical Act Two Catering Notion Leads DB.
 //
-// Required env vars (set in Netlify dashboard → Site settings → Environment variables):
-//   NOTION_API_KEY  — Internal integration token from https://www.notion.so/my-integrations
-//   NOTION_DB_ID    — 1a639be455ad4af7a3b0308cd1067727
+// Required env vars:
+//   NOTION_API_KEY       Internal Notion integration token.
+//   NOTION_LEADS_DB_ID   Canonical Leads DB ID: ea13edba7d3e4b8a9247afa92628737d
 
 const NOTION_VERSION = "2022-06-28";
+const MAX_GUESTS = 10000;
 
 const ALLOWED_ORIGINS = [
   "https://acttwocatering.com",
@@ -13,93 +14,139 @@ const ALLOWED_ORIGINS = [
   "https://acttwocatering.netlify.app",
   "http://localhost:8000",
   "http://127.0.0.1:8000",
+  "http://localhost:8888",
+  "http://127.0.0.1:8888",
 ];
+
+function json(statusCode, body, origin = "") {
+  const allowOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  return {
+    statusCode,
+    headers: {
+      "Access-Control-Allow-Origin": allowOrigin,
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+      "Content-Type": "application/json",
+      Vary: "Origin",
+    },
+    body: body ? JSON.stringify(body) : "",
+  };
+}
+
+function clean(value, maxLength) {
+  return String(value || "").trim().slice(0, maxLength);
+}
+
+function isValidEmail(value) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+function validatePayload(payload) {
+  const errors = [];
+  const name = clean(payload.name, 300);
+  const email = clean(payload.email, 300);
+  const phone = clean(payload.phone, 80);
+  const guests = clean(payload.guests, 20);
+  const details = clean(payload.details, 6000);
+
+  if (name.length < 2 || name.length > 200) errors.push("name");
+  if (!email && !phone) errors.push("email_or_phone");
+  if (email && !isValidEmail(email)) errors.push("email");
+  if (guests) {
+    const count = Number.parseInt(guests, 10);
+    if (!Number.isFinite(count) || count < 1 || count > MAX_GUESTS) errors.push("guests");
+  }
+  if (details.length > 5000) errors.push("details_too_long");
+
+  return errors;
+}
+
+function buildProperties(payload) {
+  const properties = {
+    "Lead Name": { title: [{ text: { content: clean(payload.name, 200) } }] },
+    Source: { select: { name: "Website Form" } },
+    Status: { status: { name: "New Lead" } },
+  };
+
+  const phone = clean(payload.phone, 50);
+  const email = clean(payload.email, 200);
+  const eventType = clean(payload.eventType, 100);
+  const guests = clean(payload.guests, 20);
+  const eventDate = clean(payload.eventDate, 10);
+  const location = clean(payload.location, 1000);
+  const details = clean(payload.details, 5000);
+
+  if (phone) properties.Phone = { phone_number: phone };
+  if (email) properties.Email = { email };
+  if (eventType) properties["Event Type"] = { select: { name: eventType } };
+  if (guests) properties["Guest Count"] = { number: Number.parseInt(guests, 10) };
+  if (eventDate) properties["Event Date"] = { date: { start: eventDate } };
+  if (location) properties["Venue / Location"] = { rich_text: [{ text: { content: location } }] };
+  if (details) properties.Notes = { rich_text: [{ text: { content: details } }] };
+
+  return properties;
+}
 
 exports.handler = async (event) => {
   const origin = (event.headers && (event.headers.origin || event.headers.Origin)) || "";
-  const allowOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
-  const headers = {
-    "Access-Control-Allow-Origin": allowOrigin,
-    "Vary": "Origin",
-    "Access-Control-Allow-Headers": "Content-Type",
-    "Content-Type": "application/json",
-  };
 
   if (event.httpMethod === "OPTIONS") {
-    return { statusCode: 204, headers, body: "" };
+    return json(204, null, origin);
   }
 
   if (event.httpMethod !== "POST") {
-    return { statusCode: 405, headers, body: JSON.stringify({ error: "Method not allowed" }) };
+    return json(405, { error: "method_not_allowed" }, origin);
   }
 
-  const NOTION_API_KEY = process.env.NOTION_API_KEY;
-  const NOTION_DB_ID = process.env.NOTION_DB_ID;
-
-  if (!NOTION_API_KEY || !NOTION_DB_ID) {
-    return { statusCode: 500, headers, body: JSON.stringify({ error: "Server configuration error" }) };
+  const notionApiKey = process.env.NOTION_API_KEY;
+  const notionDbId = process.env.NOTION_LEADS_DB_ID;
+  if (!notionApiKey || !notionDbId) {
+    return json(500, { error: "server_configuration_error" }, origin);
   }
 
-  let form;
+  let payload;
   try {
-    form = JSON.parse(event.body);
-  } catch (err) {
-    return { statusCode: 400, headers, body: JSON.stringify({ error: "Invalid request body" }) };
+    payload = JSON.parse(event.body || "{}");
+  } catch {
+    return json(400, { error: "invalid_json" }, origin);
   }
 
-  // Build Notion page properties
-  const properties = {
-    Name: { title: [{ text: { content: String(form.name || "").slice(0, 200) } }] },
-    Status: { select: { name: "New" } },
-    "Submitted At": { date: { start: new Date().toISOString() } },
-  };
+  if (payload.website) {
+    return json(200, { ok: true }, origin);
+  }
 
-  if (form.email) {
-    properties.Email = { email: String(form.email).slice(0, 200) };
-  }
-  if (form.phone) {
-    properties.Phone = { phone_number: String(form.phone).slice(0, 50) };
-  }
-  if (form.service) {
-    properties.Service = { select: { name: String(form.service).slice(0, 100) } };
-  }
-  if (form.guests) {
-    const n = parseInt(form.guests, 10);
-    if (Number.isFinite(n) && n > 0) {
-      properties.Guests = { number: n };
-    }
-  }
-  if (form.eventDate) {
-    properties["Event Date"] = { date: { start: String(form.eventDate).slice(0, 10) } };
-  }
-  if (form.location) {
-    properties.Location = { rich_text: [{ text: { content: String(form.location).slice(0, 500) } }] };
-  }
-  if (form.details) {
-    properties.Details = { rich_text: [{ text: { content: String(form.details).slice(0, 2000) } }] };
+  const errors = validatePayload(payload);
+  if (errors.length) {
+    return json(400, { error: "validation_failed", fields: errors }, origin);
   }
 
   try {
-    const res = await fetch("https://api.notion.com/v1/pages", {
+    const response = await fetch("https://api.notion.com/v1/pages", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${NOTION_API_KEY}`,
+        Authorization: `Bearer ${notionApiKey}`,
         "Notion-Version": NOTION_VERSION,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        parent: { database_id: NOTION_DB_ID },
-        properties,
+        parent: { database_id: notionDbId },
+        properties: buildProperties(payload),
       }),
     });
 
-    if (!res.ok) {
-      const err = await res.text();
-      return { statusCode: 502, headers, body: JSON.stringify({ error: "Failed to save quote" }) };
+    if (!response.ok) {
+      console.error("notion_create_failed", { status: response.status });
+      return json(502, { error: "downstream_failure" }, origin);
     }
 
-    return { statusCode: 200, headers, body: JSON.stringify({ ok: true }) };
-  } catch (err) {
-    return { statusCode: 502, headers, body: JSON.stringify({ error: "Failed to save quote" }) };
+    return json(200, { ok: true }, origin);
+  } catch (error) {
+    console.error("notion_create_failed", { message: error instanceof Error ? error.message : String(error) });
+    return json(502, { error: "downstream_failure" }, origin);
   }
+};
+
+exports._private = {
+  buildProperties,
+  validatePayload,
 };
