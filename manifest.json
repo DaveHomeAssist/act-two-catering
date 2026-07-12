@@ -2,37 +2,37 @@
   "name": "Act Two Catering",
   "short_name": "Act Two",
   "description": "A premium catering experience tailored for smaller gatherings — restaurant-quality cuisine and exceptional service throughout South Jersey and the greater Philadelphia area.",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#1E1610",
   "theme_color": "#722F37",
   "orientation": "any",
-  "scope": "/",
+  "scope": "./",
   "categories": ["food", "business"],
   "icons": [
-    { "src": "/assets/icons/favicon/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
-    { "src": "/assets/icons/favicon/icon-72x72.png", "sizes": "72x72", "type": "image/png", "purpose": "any" },
-    { "src": "/assets/icons/favicon/icon-96x96.png", "sizes": "96x96", "type": "image/png", "purpose": "any" },
-    { "src": "/assets/icons/favicon/icon-128x128.png", "sizes": "128x128", "type": "image/png", "purpose": "any" },
-    { "src": "/assets/icons/favicon/icon-144x144.png", "sizes": "144x144", "type": "image/png", "purpose": "any" },
-    { "src": "/assets/icons/favicon/icon-152x152.png", "sizes": "152x152", "type": "image/png", "purpose": "any" },
-    { "src": "/assets/icons/favicon/icon-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
-    { "src": "/assets/icons/favicon/icon-384x384.png", "sizes": "384x384", "type": "image/png", "purpose": "any" },
-    { "src": "/assets/icons/favicon/icon-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    { "src": "./assets/icons/favicon/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "./assets/icons/favicon/icon-72x72.png", "sizes": "72x72", "type": "image/png", "purpose": "any" },
+    { "src": "./assets/icons/favicon/icon-96x96.png", "sizes": "96x96", "type": "image/png", "purpose": "any" },
+    { "src": "./assets/icons/favicon/icon-128x128.png", "sizes": "128x128", "type": "image/png", "purpose": "any" },
+    { "src": "./assets/icons/favicon/icon-144x144.png", "sizes": "144x144", "type": "image/png", "purpose": "any" },
+    { "src": "./assets/icons/favicon/icon-152x152.png", "sizes": "152x152", "type": "image/png", "purpose": "any" },
+    { "src": "./assets/icons/favicon/icon-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "./assets/icons/favicon/icon-384x384.png", "sizes": "384x384", "type": "image/png", "purpose": "any" },
+    { "src": "./assets/icons/favicon/icon-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ],
   "screenshots": [],
   "shortcuts": [
     {
       "name": "Sample Menus",
       "short_name": "Menus",
-      "url": "/#/sample-menus",
-      "icons": [{ "src": "/assets/icons/favicon/icon-96x96.png", "sizes": "96x96" }]
+      "url": "./#/sample-menus",
+      "icons": [{ "src": "./assets/icons/favicon/icon-96x96.png", "sizes": "96x96" }]
     },
     {
       "name": "Contact Us",
       "short_name": "Contact",
-      "url": "/#/contact",
-      "icons": [{ "src": "/assets/icons/favicon/icon-96x96.png", "sizes": "96x96" }]
+      "url": "./#/contact",
+      "icons": [{ "src": "./assets/icons/favicon/icon-96x96.png", "sizes": "96x96" }]
     }
   ]
 }
